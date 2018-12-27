@@ -713,11 +713,15 @@ class AnkiConnect:
                     skip = skipHash == m.hexdigest()
 
                 if not skip:
+                    # get filename the audio file was saved as
+                    fname = self.media().writeData(audio['filename'], data)
+                    
+                    # write media reference "sound tag" in each specified note field
                     for field in audio['fields']:
                         if field in ankiNote:
-                            ankiNote[field] += u'[sound:{}]'.format(audio['filename'])
+                            ankiNote[field] += u'[sound:{}]'.format(fname)
 
-                    self.media().writeData(audio['filename'], data)
+                    
             except Exception as e:
                 errorMessage = str(e).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                 for field in audio['fields']:
